@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>
+        <form action="add_data/" method="post">
+            {% csrf_token %}
+            <h3>Добавить курс</h3>
+            <input type="text" name="currency">
+            <input type="text" name="course">
+            <input type="submit" value="Search">
+        </form>
+    </div>
+
+    <div>
+        <form action="search_data/" method="post">
+            {% csrf_token %}
+            <h3>Поиск Курса</h3>
+            <p>По Валюте</p>
+            <input type="text" name="currency">
+            <p>по времени</p>
+            <input type="text" name="time">
+            <input type="submit" value="Search">
+        </form>
+    </div>
+</body>
+</html>
