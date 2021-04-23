@@ -11,7 +11,7 @@
             <h3>Добавить курс</h3>
             <input type="text" name="currency">
             <input type="text" name="course">
-            <input type="submit" value="Search">
+            <input type="submit" value="добавить">
         </form>
     </div>
 
@@ -19,12 +19,20 @@
         <form action="search_data/" method="post">
             {% csrf_token %}
             <h3>Поиск Курса</h3>
-            <p>По Валюте</p>
+            <p>по валюте</p>
             <input type="text" name="currency">
             <p>по времени</p>
             <input type="text" name="time">
-            <input type="submit" value="Search">
+            <input type="submit" value="искать">
         </form>
+    </div>
+
+    <div>
+        <button><a href="converterTo/">Конвертировать в валюту</a></button>
+        <button><a href="converterFrom/">Конвертировать в рубли</a></button>
     </div>
 </body>
 </html>
+
+
+

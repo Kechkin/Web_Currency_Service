@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>
+        <form action="" method="post">
+            {% csrf_token %}
+            <h3>Корвертация</h3>
+            <p>По Валюте</p>
+            <input type="text" name="currency">
+            <p>Сколько денег</p>
+            <input type="text" name="rub">
+            <input type="submit" value="Search">
+            <p>Перевод {{rub}} в{{currency}} по курсу {{course}} составляет{{result}}</p>
+        </form>
+        <button><a href="/">На главную</a></button>
+    </div>
+</body>
+</html>

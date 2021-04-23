@@ -32,7 +32,7 @@ def index(request):
 
 # поиск по БД
 def search_data(request):
-    context = ''
+    course = ''
     res = {}
     if request.method == "POST":
         currency = request.POST['currency']
@@ -42,16 +42,16 @@ def search_data(request):
             if time_data:
                 for i in DB[currency].keys():
                     if time_data >= i:
-                        context = DB[currency][i]["course"]
+                        course = DB[currency][i]["course"]
             else:
                 # поиск по последнему добавленному по дате
                 time_data = max(DB[currency].keys())
-                context = DB[currency][time_data]["course"]
+                course = DB[currency][time_data]["course"]
         else:
             return HttpResponse("Такой валюты нет или ввели ошибочно")
         res = {
             "currency": currency,
-            "course": context,
+            "course": course,
             "time": time_data
         }
     return render(request, 'app_converter/search_data.html', res)
@@ -65,8 +65,47 @@ def add_data(request):
         currency = request.POST['currency']
         course = request.POST['course']
         # добавляем в БД пришедшие данные
-        if currency in DB:
-            DB[currency][time_data] = {"course": course}
+        if currency and course:
+            if currency in DB:
+                DB[currency][time_data] = {"course": course}
+            else:
+                DB[currency] = {time_data: {"course": course}}
         else:
-            DB[currency] = {time_data: {"course": course}}
-    return HttpResponse("данные отправлены")
+            return HttpResponse("Введите данные")
+    return render(request, 'app_converter/add_data.html')
+
+
+def converterTo(request):
+    context = {}
+    if request.method == "POST":
+        currency = request.POST['currency']
+        rub = request.POST['rub']
+        if currency in DB and rub:
+            time_data = max(DB[currency].keys())
+            course = DB[currency][time_data]["course"]
+            result = "%.2f" % (float(rub) / float(course))
+            context = {
+                "rub": rub,
+                "currency": currency,
+                "course": course,
+                "result": result
+            }
+    return render(request, 'app_converter/converterTo.html', context)
+
+
+def converterFrom(request):
+    context = {}
+    if request.method == "POST":
+        currency = request.POST['currency']
+        money = request.POST['money']
+        if currency in DB and money:
+            time_data = max(DB[currency].keys())
+            course = DB[currency][time_data]["course"]
+            result = "%.2f" % (float(money) * float(course))
+            context = {
+                "money": money,
+                "currency": currency,
+                "course": course,
+                "result": result
+            }
+    return render(request, 'app_converter/converterFrom.html', context)
