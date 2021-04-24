@@ -1,0 +1,51 @@
+body{
+    font-family: Verdana;
+    background: rgb(204,236,220);
+    background: linear-gradient(90deg, rgba(204,236,220,1) 0%, rgba(151,151,171,1) 43%, rgba(0,212,255,1) 100%);
+}
+h1{
+   color:navy;
+}
+a{
+  text-decoration: none;
+  color: black;
+}
+
+input{
+    padding: 5px;
+}
+
+.main_block{
+    background: rgb(97,162,163);
+    background: linear-gradient(0deg, rgba(97,162,163,1) 0%, rgba(255,255,255,1) 100%);
+    padding: 100px;
+    border: 1px solid black;
+    border-radius: 30px;
+    width: 20%;
+    margin: 150px auto;
+    -webkit-box-shadow: 10px 9px 20px 12px rgba(34, 60, 80, 0.38);
+    -moz-box-shadow: 10px 9px 20px 12px rgba(34, 60, 80, 0.38);
+    box-shadow: 10px 9px 20px 12px rgba(34, 60, 80, 0.38);
+}
+.button_link{
+    margin-top:60px;
+}
+
+.button_link button{
+    padding: 15px;
+    width: 100%;
+}
+
+.button_link button:hover{
+  cursor: pointer;
+}
+.search{
+    width:71px;
+}
+
+.home{
+    padding:10px;
+}
+select{
+    padding:5px;
+}

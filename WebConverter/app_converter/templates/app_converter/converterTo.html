@@ -1,22 +1,35 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
 </head>
 <body>
-    <div>
+
+    <div class="main_block">
         <form action="" method="post">
             {% csrf_token %}
             <h3>Корвертация</h3>
             <p>По Валюте</p>
-            <input type="text" name="currency">
-            <p>Сколько денег</p>
-            <input type="text" name="rub">
-            <input type="submit" value="Search">
-            <p>Перевод {{rub}} в{{currency}} по курсу {{course}} составляет{{result}}</p>
+            <select name="currency">
+                {% for i in DB %}
+                    <option>{{i}}</option>
+                {% endfor %}
+            </select>
+             <select name="currency2">
+                {% for i in DB %}
+                    <option>{{i}}</option>
+                {% endfor %}
+            </select>
+            <p>Сумма перевода</p>
+            <input type="text" name="money" placeholder="10.5">
+            <input type="submit" value="перевести">
+            <p>Перевод из {{currency}} в {{currency2}} по курсу {{course}} составляет {{result}}</p>
         </form>
-        <button><a href="/">На главную</a></button>
+        <button class="home"><a href="/">На главную</a></button>
     </div>
 </body>
 </html>
+

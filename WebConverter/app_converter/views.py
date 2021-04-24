@@ -1,39 +1,26 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from datetime import datetime
-from django.template import loader
 
 DB = {
-    "Евро": {
-        "12:40": {
-            "course": "40"
+    "Рубль": {
+        "00:00": {
+            "course": "1"
         },
-        "12:50": {
-            "course": "50"
-        },
-        "13:00": {
-            "course": "60"
-        }
-    },
-    "Доллар": {
-        "12:41": {
-            "course": "84.2"
-        },
-        "12:45": {
-            "course": "84.5"
-        }
     }
 }
 
 
 def index(request):
-    return render(request, 'app_converter/index.html')
+    context2 = {
+        "DB": DB.keys()
+    }
+    return render(request, 'app_converter/index.html', context2)
 
 
 # поиск по БД
 def search_data(request):
-    course = ''
-    res = {}
+    context, start_time_current, course = {}, '', ''
     if request.method == "POST":
         currency = request.POST['currency']
         time_data = request.POST['time']
@@ -43,25 +30,26 @@ def search_data(request):
                 for i in DB[currency].keys():
                     if time_data >= i:
                         course = DB[currency][i]["course"]
+                        start_time_current = i
             else:
                 # поиск по последнему добавленному по дате
                 time_data = max(DB[currency].keys())
                 course = DB[currency][time_data]["course"]
         else:
             return HttpResponse("Такой валюты нет или ввели ошибочно")
-        res = {
+        context = {
             "currency": currency,
             "course": course,
-            "time": time_data
+            "time": start_time_current or time_data
         }
-    return render(request, 'app_converter/search_data.html', res)
+        return render(request, 'app_converter/search_data.html', context)
 
 
 # добавить курс в БД
 
 def add_data(request):
     if request.method == "POST":
-        time_data = datetime.now().strftime("%H:%M:%S")
+        time_data = datetime.now().strftime("%H:%M")  # ("%H:%M %d-%m-%y) - добавить с датой
         currency = request.POST['currency']
         course = request.POST['course']
         # добавляем в БД пришедшие данные
@@ -71,7 +59,7 @@ def add_data(request):
             else:
                 DB[currency] = {time_data: {"course": course}}
         else:
-            return HttpResponse("Введите данные")
+            return HttpResponse("Вы не ввели данные")
     return render(request, 'app_converter/add_data.html')
 
 
@@ -79,33 +67,26 @@ def converterTo(request):
     context = {}
     if request.method == "POST":
         currency = request.POST['currency']
-        rub = request.POST['rub']
-        if currency in DB and rub:
-            time_data = max(DB[currency].keys())
-            course = DB[currency][time_data]["course"]
-            result = "%.2f" % (float(rub) / float(course))
-            context = {
-                "rub": rub,
-                "currency": currency,
-                "course": course,
-                "result": result
-            }
-    return render(request, 'app_converter/converterTo.html', context)
-
-
-def converterFrom(request):
-    context = {}
-    if request.method == "POST":
-        currency = request.POST['currency']
+        currency2 = request.POST['currency2']
         money = request.POST['money']
-        if currency in DB and money:
+        if currency in DB and currency2 in DB and money:
+            # поиск по послед. добавленному курсу
             time_data = max(DB[currency].keys())
+            time_data2 = max(DB[currency2].keys())
             course = DB[currency][time_data]["course"]
-            result = "%.2f" % (float(money) * float(course))
+            course2 = DB[currency2][time_data2]["course"]
+            result = "%.2f" % ((float(money) * float(course)) / float(course2))
             context = {
                 "money": money,
                 "currency": currency,
+                "currency2": currency2,
                 "course": course,
-                "result": result
+                "result": result,
+                "DB": DB.keys()
             }
-    return render(request, 'app_converter/converterFrom.html', context)
+        return render(request, 'app_converter/converterTo.html', context)
+    elif request.method == "GET":
+        context2 = {
+            "DB": DB.keys()
+        }
+        return render(request, 'app_converter/converterTo.html', context2)
