@@ -1,26 +1,22 @@
-import requests
-from django.test import TestCase
 import os
 import django
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Webconverter.settings")
 django.setup()
-import unittest
-from django.test import Client
+from django.test import TestCase, Client
 
 
-class SimpleTest(unittest.TestCase):
-    def test_details(self):
+class SimpleTest(TestCase):
+    def test_get_index(self):
         client = Client()
         response = client.get('/')
         self.assertEqual(response.status_code, 200)
 
     def test_conv_to(self):
         c = Client()
-        response = c.post('/converterTo/', {'currency': 'Евро', 'rub': '444'})
+        response = c.post('/converterTo/', {'currency': 'Евро', 'money': '444', 'currency2': 'Доллар'})
         self.assertEqual(response.status_code, 200)
 
-    def test_conv_From(self):
+    def test_add(self):
         c = Client()
-        response = c.post('/converterFrom/', {'currency': 'Евро', 'money': '14.5'})
+        response = c.post('/', {'currency': 'Евро', 'course': '82.4'})
         self.assertEqual(response.status_code, 200)
